@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
-import { SecureController } from './Secure.controller'
-import { SecureService } from './Secure.service'
+import { SecureController } from './secure.controller'
+import { SecureService } from './secure.service'
 
 @Module({
   controllers: [SecureController],

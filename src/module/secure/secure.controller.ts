@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Res } from '@nestjs/common'
-import { SecureService } from './Secure.service'
+import { SecureService } from './secure.service'
 import { ApiTags } from '@nestjs/swagger'
 import { ApiBody_CryptoPayload } from './docs/secure.docs'
 
