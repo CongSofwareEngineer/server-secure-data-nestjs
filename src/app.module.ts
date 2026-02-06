@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { LoggerMiddleware } from './logger.middleware'
-import { SecureModule } from './module/Secure/secure.module'
+import { SecureModule } from './module/secure/secure.module'
 import { HealthModule } from './module/health/health.module'
 
 
