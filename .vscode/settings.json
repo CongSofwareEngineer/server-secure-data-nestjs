@@ -1,0 +1,27 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.eol": "\n",
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "typescriptreact"
+  ],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+  "eslint.run": "onType",
+  "eslint.alwaysShowStatus": true,
+  "eslint.format.enable": true,
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+  "scm.inputFontSize": 12,
+  "editor.fontSize": 13,
+  "debug.console.fontSize": 13,
+  "terminal.integrated.fontSize": 12,
+  "explorer.openEditors.minVisible": 11
+}
