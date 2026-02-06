@@ -1,11 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import { MongooseModule } from '@nestjs/mongoose'
-import { ThrottlerModule } from '@nestjs/throttler'
-import { APP_GUARD } from '@nestjs/core'
-
 import { LoggerMiddleware } from './logger.middleware'
-import { SecureModule } from './module/Secure/Secure.module'
+import { SecureModule } from './module/Secure/secure.module'
 import { HealthModule } from './module/health/health.module'
 
 
