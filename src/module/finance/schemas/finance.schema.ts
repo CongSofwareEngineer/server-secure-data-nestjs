@@ -3,11 +3,11 @@ import { HydratedDocument, Types } from 'mongoose'
 import { DB_COLLECTION } from 'src/common/mongoDB'
 
 export enum FinanceStatus {
-  Withdraw = 'rút',
-  Deposit = 'nạp',
+  Withdraw = 'Withdraw',
+  Deposit = 'Deposit',
 }
 
-@Schema({ collection: DB_COLLECTION.Finance, versionKey: false, timestamps: true })
+@Schema({ collection: DB_COLLECTION.Finance, versionKey: false, timestamps: { createdAt: true, updatedAt: false } })
 export class Finance {
   _id?: Types.ObjectId
 

@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { HydratedDocument, Types } from 'mongoose'
 import { DB_COLLECTION } from 'src/common/mongoDB'
 
-@Schema({ collection: DB_COLLECTION.Account, versionKey: false, timestamps: true })
+@Schema({ collection: DB_COLLECTION.Account, versionKey: false })
 export class Account {
   _id?: Types.ObjectId
 
