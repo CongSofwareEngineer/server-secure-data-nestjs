@@ -22,6 +22,7 @@ export class UserController {
 
   @ApiOperation({ summary: 'Register a new account' })
   @ApiBody_Register
+  @UseGuards(JwtAuthGuard)
   @Post('register')
   async register(@Res() res, @Body() body) {
     const data = await this.userService.register(body)
@@ -57,6 +58,7 @@ export class UserController {
   @ApiOperation({ summary: 'Get list of users' })
   @ApiQuery_Page
   @ApiQuery_Limit
+  @UseGuards(JwtAuthGuard)
   @Get('all')
   async findAll(@Res() res, @Query() query) {
     const data = await this.userService.findAll(query)
@@ -66,6 +68,7 @@ export class UserController {
 
   @ApiOperation({ summary: 'Get user details' })
   @ApiParam_Id
+  @UseGuards(JwtAuthGuard)
   @Get('detail/:id')
   async findOne(@Res() res, @Param('id') id: string) {
     const data = await this.userService.findOne(id)
@@ -76,6 +79,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Create a new user (admin only)' })
   @ApiBody_CreateUser
+  @UseGuards(JwtAuthGuard)
   @Post('create')
   async create(@Res() res, @Body() body) {
     const data = await this.userService.createUser(body)
