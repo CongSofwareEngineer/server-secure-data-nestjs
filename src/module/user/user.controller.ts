@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Res, Query, Delete, Put, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, Res, Query, Delete, Put, UseGuards, Req } from '@nestjs/common'
 import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger'
 
 import { UserService } from './user.service'
@@ -100,6 +100,17 @@ export class UserController {
   @Delete('delete/:id')
   async remove(@Res() res, @Param('id') id: string) {
     const data = await this.userService.remove(id)
+
+    return formatRes(res, data)
+  }
+
+
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Get user information' })
+  @Post('info-me')
+  async getInfoMe(@Res() res, @Req() req) {
+    const tokenAccess = req.cookies.tokenAccess
+    const data = await this.userService.getInfoMe(tokenAccess)
 
     return formatRes(res, data)
   }
