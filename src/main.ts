@@ -6,6 +6,7 @@ import { json } from 'express'
 import { Transport, MicroserviceOptions } from '@nestjs/microservices'
 import helmet from 'helmet'
 import * as cookieParser from 'cookie-parser'
+import { NestExpressApplication } from '@nestjs/platform-express'
 
 
 const darkThemeCss = `
@@ -21,7 +22,7 @@ const darkThemeCss = `
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap')
-  const app = await NestFactory.create(AppModule)
+  const app = await NestFactory.create<NestExpressApplication>(AppModule)
 
   app.use(cookieParser())
 
@@ -30,6 +31,7 @@ async function bootstrap() {
   if (process.env.ENABLE_LIMIT_DOMAIN) {
     listDomain = process.env.DOMAIN_VALID.split(',')
   }
+  app.set('trust proxy', 1)
   app.enableCors({
     origin: listDomain,
     credentials: true,
