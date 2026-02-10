@@ -11,8 +11,6 @@ export enum FinanceStatus {
 export class Finance {
   _id?: Types.ObjectId
 
-  @Prop({ type: Date, required: true, default: Date.now })
-  date: Date
 
   @Prop({ type: Number, required: true })
   usdAmount: number
