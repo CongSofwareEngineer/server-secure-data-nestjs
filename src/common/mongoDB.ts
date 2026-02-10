@@ -1,6 +1,7 @@
 export enum DB_COLLECTION {
   User = 'User',
   Account = 'Account',
+  AccountCloud = 'AccountCloud',
   Finance = 'Finance',
 }
 

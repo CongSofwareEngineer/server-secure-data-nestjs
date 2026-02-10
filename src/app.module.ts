@@ -13,6 +13,7 @@ import { AuthModule } from './module/auth/auth.module'
 import { UserModule } from './module/user/user.module'
 import { AccountModule } from './module/account/account.module'
 import { FinanceModule } from './module/finance/finance.module'
+import { AccountCloudModule } from './module/accountCloud/accountCloud.module'
 
 
 export const throttlerOptions = {
@@ -48,6 +49,7 @@ export const throttlerOptions = {
     HealthModule,
     UserModule,
     AccountModule,
+    AccountCloudModule,
     FinanceModule,
 
     ThrottlerModule.forRoot(throttlerOptions.throttlers),
