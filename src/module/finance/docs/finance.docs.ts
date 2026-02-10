@@ -42,6 +42,6 @@ export const ApiQuery_Page = ApiQuery({
 export const ApiQuery_Limit = ApiQuery({
   name: 'limit',
   required: false,
-  description: 'Number of items per page (default: 10)',
-  example: 10,
+  description: 'Number of items per page (default: 20)',
+  example: 20,
 })

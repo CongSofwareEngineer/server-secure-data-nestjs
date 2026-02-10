@@ -73,13 +73,13 @@ export class UserService {
 
   async findAll(query: any) {
     try {
-      const data = await FunService.getDataByOptions(this.userModel, query)
+      const { data, pagination } = await FunService.getDataByOptionsWithPagination(this.userModel, query)
 
-      return { data }
+      return { data, pagination }
     } catch (error) {
       console.error('Error finding all Users:', error)
 
-      return { data: [] }
+      return { data: [], pagination: { page: 1, limit: 20, total: 0, totalPages: 0 } }
     }
   }
 

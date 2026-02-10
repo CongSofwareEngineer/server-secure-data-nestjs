@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger'
 import { AccountService } from './account.service'
 import { formatRes } from 'src/utils/function'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
-import { ApiParam_Id, ApiBody_CreateAccount, ApiBody_UpdateAccount } from './docs/account.docs'
+import { ApiParam_Id, ApiBody_CreateAccount, ApiBody_UpdateAccount, ApiQuery_Page, ApiQuery_Limit } from './docs/account.docs'
 
 @ApiBearerAuth()
 @ApiTags('Account')
@@ -12,6 +12,8 @@ export class AccountController {
   constructor(private accountService: AccountService) { }
 
   @ApiOperation({ summary: 'Get list of accounts' })
+  @ApiQuery_Page
+  @ApiQuery_Limit
   @Get('all')
   async findAll(@Res() res, @Query() query) {
     const data = await this.accountService.findAll(query)

@@ -18,14 +18,13 @@ export class AccountService {
 
   async findAll(query: any) {
     try {
+      const { data, pagination } = await FunService.getDataByOptionsWithPagination(this.accountModel, query)
 
-      const data = await FunService.getDataByOptions(this.accountModel, query)
-
-      return { data }
+      return { data, pagination }
     } catch (error) {
       console.error('Error finding all Accounts:', error)
 
-      return { data: [] }
+      return { data: [], pagination: { page: 1, limit: 20, total: 0, totalPages: 0 } }
     }
   }
 

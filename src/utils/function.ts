@@ -93,8 +93,11 @@ export function lowercase(text: any): string {
 }
 
 export function getPageLimitSkip(query: { [key: string]: any }) {
-  const page = Number(query?.page || 1)
-  const limit = Number(query?.limit || LIMIT_DATA)
+  const rawPage = Number(query?.page)
+  const rawLimit = Number(query?.limit)
+
+  const page = Number.isFinite(rawPage) && rawPage > 0 ? Math.floor(rawPage) : 1
+  const limit = Number.isFinite(rawLimit) && rawLimit > 0 ? Math.floor(rawLimit) : LIMIT_DATA
   const skip = (page - 1) * limit
 
   return {

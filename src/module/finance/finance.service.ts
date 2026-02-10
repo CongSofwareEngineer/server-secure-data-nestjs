@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
-import { Finance, FinanceDocument } from './schemas/finance.schema'
+import { Finance, FinanceDocument, FinanceStatus } from './schemas/finance.schema'
 import { FunService } from 'src/utils/funcService'
 import { getIdObject } from 'src/utils/function'
 
@@ -11,6 +11,49 @@ export class FinanceService {
     @InjectModel(Finance.name) private financeModel: Model<FinanceDocument>
   ) { }
 
+  async getUsdRemaining(): Promise<{ usdRemaining: number; totalDeposit: number; totalWithdraw: number }> {
+    try {
+      const [result] = await this.financeModel
+        .aggregate<{
+          _id: null
+          totalDeposit: number
+          totalWithdraw: number
+          usdRemaining: number
+        }>([
+          {
+            $group: {
+              _id: null,
+              totalDeposit: {
+                $sum: {
+                  $cond: [{ $eq: ['$status', FinanceStatus.Deposit] }, '$usdAmount', 0],
+                },
+              },
+              totalWithdraw: {
+                $sum: {
+                  $cond: [{ $eq: ['$status', FinanceStatus.Withdraw] }, '$usdAmount', 0],
+                },
+              },
+            },
+          },
+          {
+            $addFields: {
+              usdRemaining: { $subtract: ['$totalDeposit', '$totalWithdraw'] },
+            },
+          },
+        ])
+        .exec()
+
+      return {
+        usdRemaining: result?.usdRemaining ?? 0,
+        totalDeposit: result?.totalDeposit ?? 0,
+        totalWithdraw: result?.totalWithdraw ?? 0,
+      }
+    } catch (error) {
+      console.error('Error calculating USD remaining:', error)
+      return { usdRemaining: 0, totalDeposit: 0, totalWithdraw: 0 }
+    }
+  }
+
   async create(data: Partial<Finance>): Promise<Finance | null> {
 
 
@@ -19,15 +62,13 @@ export class FinanceService {
 
   async findAll(query: any) {
     try {
+      const { data, pagination } = await FunService.getDataByOptionsWithPagination(this.financeModel, query)
 
-
-      const data = await FunService.getDataByOptions(this.financeModel, query)
-
-      return { data }
+      return { data, pagination }
     } catch (error) {
       console.error('Error finding all Finance records:', error)
 
-      return { data: [] }
+      return { data: [], pagination: { page: 1, limit: 20, total: 0, totalPages: 0 } }
     }
   }
 

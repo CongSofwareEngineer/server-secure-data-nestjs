@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger'
 import { FinanceService } from './finance.service'
 import { formatRes } from 'src/utils/function'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
-import { ApiParam_Id, ApiBody_CreateFinance, ApiBody_UpdateFinance } from './docs/finance.docs'
+import { ApiParam_Id, ApiBody_CreateFinance, ApiBody_UpdateFinance, ApiQuery_Page, ApiQuery_Limit } from './docs/finance.docs'
 
 @ApiBearerAuth()
 @ApiTags('Finance')
@@ -11,7 +11,18 @@ import { ApiParam_Id, ApiBody_CreateFinance, ApiBody_UpdateFinance } from './doc
 export class FinanceController {
   constructor(private financeService: FinanceService) { }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Get USD remaining (deposit - withdraw)' })
+  @Get('usd-remaining')
+  async getUsdRemaining(@Res() res) {
+    const data = await this.financeService.getUsdRemaining()
+
+    return formatRes(res, data)
+  }
+
   @ApiOperation({ summary: 'Get list of finance records' })
+  @ApiQuery_Page
+  @ApiQuery_Limit
   @Get('all')
   async findAll(@Res() res, @Query() query) {
     const data = await this.financeService.findAll(query)
