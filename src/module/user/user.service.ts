@@ -126,4 +126,26 @@ export class UserService {
       return null
     }
   }
+
+  async getInfoMe(tokenAccess: string): Promise<User | null> {
+    try {
+      const token = this.authService.verifyAth(tokenAccess)
+
+      if (token) {
+        const idUser = await this.userModel.findById(token.id)
+        const user = await this.userModel.findById(idUser)
+        const userClone = user.toObject()
+
+        delete userClone.password
+
+        return userClone
+      }
+
+      return null
+    } catch (error) {
+      console.error('Error getting user info:', error)
+
+      return null
+    }
+  }
 }

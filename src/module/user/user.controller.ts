@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Res, Query, Delete, Put, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, Res, Query, Delete, Put, UseGuards, Req } from '@nestjs/common'
 import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger'
 
 import { UserService } from './user.service'
@@ -22,6 +22,7 @@ export class UserController {
 
   @ApiOperation({ summary: 'Register a new account' })
   @ApiBody_Register
+  @UseGuards(JwtAuthGuard)
   @Post('register')
   async register(@Res() res, @Body() body) {
     const data = await this.userService.register(body)
@@ -59,6 +60,7 @@ export class UserController {
   @ApiOperation({ summary: 'Get list of users' })
   @ApiQuery_Page
   @ApiQuery_Limit
+  @UseGuards(JwtAuthGuard)
   @Get('all')
   async findAll(@Res() res, @Query() query) {
     const data = await this.userService.findAll(query)
@@ -68,6 +70,7 @@ export class UserController {
 
   @ApiOperation({ summary: 'Get user details' })
   @ApiParam_Id
+  @UseGuards(JwtAuthGuard)
   @Get('detail/:id')
   async findOne(@Res() res, @Param('id') id: string) {
     const data = await this.userService.findOne(id)
@@ -78,6 +81,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Create a new user (admin only)' })
   @ApiBody_CreateUser
+  @UseGuards(JwtAuthGuard)
   @Post('create')
   async create(@Res() res, @Body() body) {
     const data = await this.userService.createUser(body)
@@ -102,6 +106,17 @@ export class UserController {
   @Delete('delete/:id')
   async remove(@Res() res, @Param('id') id: string) {
     const data = await this.userService.remove(id)
+
+    return formatRes(res, data)
+  }
+
+
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Get user information' })
+  @Post('info-me')
+  async getInfoMe(@Res() res, @Req() req) {
+    const tokenAccess = req.cookies.tokenAccess
+    const data = await this.userService.getInfoMe(tokenAccess)
 
     return formatRes(res, data)
   }
