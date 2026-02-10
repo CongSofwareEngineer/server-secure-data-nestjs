@@ -24,13 +24,14 @@ export const ApiBody_CreateAccountCloud = ApiBody({
   description: 'AccountCloud data',
   schema: {
     type: 'object',
-    required: ['userName', 'password'],
     properties: {
+      nameApp: { type: 'string', description: 'Name of the app' },
       userName: { type: 'string', description: 'User name' },
       password: { type: 'string', description: 'Password' },
       pinCode: { type: 'string', description: 'Pin code' },
       stk: { type: 'string', description: 'STK' },
       pinCodeBackup: { type: 'string', description: 'Backup pin code' },
+      type: { type: 'string', description: 'Type of account' },
     },
   },
 })
@@ -40,11 +41,13 @@ export const ApiBody_UpdateAccountCloud = ApiBody({
   schema: {
     type: 'object',
     properties: {
+      nameApp: { type: 'string', description: 'Name of the app' },
       userName: { type: 'string', description: 'User name' },
       password: { type: 'string', description: 'Password' },
       pinCode: { type: 'string', description: 'Pin code' },
       stk: { type: 'string', description: 'STK' },
       pinCodeBackup: { type: 'string', description: 'Backup pin code' },
+      type: { type: 'string', description: 'Type of account' },
     },
   },
 })

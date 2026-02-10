@@ -8,6 +8,7 @@ import { ApiParam_Id, ApiBody_CreateAccount, ApiBody_UpdateAccount, ApiQuery_Pag
 @ApiBearerAuth()
 @ApiTags('Account')
 @Controller('account')
+@UseGuards(JwtAuthGuard)
 export class AccountController {
   constructor(private accountService: AccountService) { }
 
@@ -30,7 +31,6 @@ export class AccountController {
     return formatRes(res, data)
   }
 
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Create a new account' })
   @ApiBody_CreateAccount
   @Post('create')
@@ -40,7 +40,6 @@ export class AccountController {
     return formatRes(res, data)
   }
 
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update account information' })
   @ApiParam_Id
   @ApiBody_UpdateAccount
@@ -51,7 +50,6 @@ export class AccountController {
     return formatRes(res, data)
   }
 
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Delete an account' })
   @ApiParam_Id
   @Delete('delete/:id')

@@ -18,6 +18,7 @@ export class AccountCloudService {
     }
 
     const existing = await this.findByUserName(data.userName)
+
     if (existing) {
       throw new BadRequestException('userName already exists')
     }
@@ -61,6 +62,7 @@ export class AccountCloudService {
     try {
       if (updateData.userName) {
         const existing = await this.findByUserName(updateData.userName)
+
         if (existing && existing._id?.toString() !== id) {
           throw new BadRequestException('userName already exists')
         }
@@ -86,4 +88,5 @@ export class AccountCloudService {
       return null
     }
   }
+
 }

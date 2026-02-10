@@ -8,10 +8,10 @@ import { ApiParam_Id, ApiBody_CreateFinance, ApiBody_UpdateFinance, ApiQuery_Pag
 @ApiBearerAuth()
 @ApiTags('Finance')
 @Controller('finance')
+@UseGuards(JwtAuthGuard)
 export class FinanceController {
   constructor(private financeService: FinanceService) { }
 
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get USD remaining (deposit - withdraw)' })
   @Get('usd-remaining')
   async getUsdRemaining(@Res() res) {
@@ -39,7 +39,6 @@ export class FinanceController {
     return formatRes(res, data)
   }
 
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Create a new finance record' })
   @ApiBody_CreateFinance
   @Post('create')
@@ -49,7 +48,6 @@ export class FinanceController {
     return formatRes(res, data)
   }
 
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update finance record information' })
   @ApiParam_Id
   @ApiBody_UpdateFinance
@@ -60,7 +58,6 @@ export class FinanceController {
     return formatRes(res, data)
   }
 
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Delete a finance record' })
   @ApiParam_Id
   @Delete('delete/:id')

@@ -15,6 +15,7 @@ import {
 @ApiBearerAuth()
 @ApiTags('AccountCloud')
 @Controller('account-cloud')
+@UseGuards(JwtAuthGuard)
 export class AccountCloudController {
   constructor(private accountCloudService: AccountCloudService) { }
 
@@ -37,7 +38,6 @@ export class AccountCloudController {
     return formatRes(res, data)
   }
 
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Create a new AccountCloud record' })
   @ApiBody_CreateAccountCloud
   @Post('create')
@@ -47,7 +47,6 @@ export class AccountCloudController {
     return formatRes(res, data)
   }
 
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update AccountCloud information' })
   @ApiParam_Id
   @ApiBody_UpdateAccountCloud
@@ -58,7 +57,6 @@ export class AccountCloudController {
     return formatRes(res, data)
   }
 
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Delete an AccountCloud record' })
   @ApiParam_Id
   @Delete('delete/:id')
@@ -67,5 +65,6 @@ export class AccountCloudController {
 
     return formatRes(res, data)
   }
-}
 
+
+}
