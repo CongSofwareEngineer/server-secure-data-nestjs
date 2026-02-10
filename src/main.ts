@@ -28,14 +28,18 @@ async function bootstrap() {
 
   let listDomain: string | string[] = '*'
 
+
+
   if (process.env.ENABLE_LIMIT_DOMAIN) {
     listDomain = process.env.DOMAIN_VALID.split(',')
+    app.set('trust proxy', 1)
+    app.enableCors({
+      origin: listDomain,
+      credentials: false,
+    })
+  } else {
+    app.enableCors()
   }
-  app.set('trust proxy', 1)
-  app.enableCors({
-    origin: listDomain,
-    credentials: true,
-  })
   // Security headers
   app.use(helmet())
 

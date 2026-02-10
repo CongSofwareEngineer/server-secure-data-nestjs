@@ -12,22 +12,24 @@ export class AuthController {
   @ApiOperation({ summary: 'Refresh access token using refresh token cookie' })
   @Post('/refresh')
   async refreshToken(@Res() res, @Request() req) {
-    const tokenRefresh = req.cookies.tokenRefresh || ''
+    // const tokenRefresh = req.cookies.tokenRefresh || ''
+    const tokenRefresh = req.headers?.authorization || ''
+
 
     const dataVerify = this.authService.verifyAth(tokenRefresh, true)
 
     if (dataVerify && typeof dataVerify !== 'boolean') {
       const tokenAccess = this.authService.generateAuthAccess(dataVerify.id, dataVerify.sdt)
 
-      res.cookie('tokenAccess', tokenAccess, {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none',
-        maxAge: 15 * 60 * 1000, // 15 min
-        path: '/'
-      })
+      // res.cookie('tokenAccess', tokenAccess, {
+      //   httpOnly: true,
+      //   secure: true,
+      //   sameSite: 'none',
+      //   maxAge: 15 * 60 * 1000, // 15 min
+      //   path: '/'
+      // })
 
-      return formatRes(res, { status: true })
+      return formatRes(res, { status: true, tokenAccess })
     }
 
     return formatRes(res, { status: false })

@@ -13,15 +13,15 @@ export class JwtAuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest()
 
+    // const authorization = request.cookies?.tokenAccess || ''
+    const authorization = request.headers?.authorization || ''
 
-    const authorization = request.cookies?.tokenAccess || ''
 
     if (!authorization) {
       throw new UnauthorizedException('Missing authorization header')
     }
 
     const payload = this.authService.verifyAth(authorization)
-
 
     if (!payload) {
       throw new UnauthorizedException('Invalid or expired token')

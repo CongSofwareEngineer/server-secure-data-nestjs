@@ -36,25 +36,27 @@ export class UserController {
   async login(@Res() res, @Body() body) {
     const { user, tokenAccess, tokenRefresh } = await this.userService.login(body.phone, body.password)
 
-    res.cookie('tokenAccess', tokenAccess, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      maxAge: 15 * 60 * 1000, // 15 min
-      path: '/',
-      domain: 'https://hdcong.vercel.app'
-    })
+    // res.cookie('tokenAccess', tokenAccess, {
+    //   httpOnly: true,
+    //   secure: true,
+    //   sameSite: 'none',
+    //   maxAge: 15 * 60 * 1000, // 15 min
+    //   path: '/',
+    // })
 
-    res.cookie('tokenRefresh', tokenRefresh, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      path: '/',
-      domain: 'https://hdcong.vercel.app'
-    })
+    // res.cookie('tokenRefresh', tokenRefresh, {
+    //   httpOnly: true,
+    //   secure: true,
+    //   sameSite: 'none',
+    //   maxAge: 15 * 24 * 60 * 60 * 1000, // 7 days
+    //   path: '/',
+    // })
 
-    return formatRes(res, user)
+    return formatRes(res, {
+      user,
+      tokenAccess,
+      tokenRefresh
+    })
   }
 
   @ApiOperation({ summary: 'Get list of users' })
@@ -115,7 +117,8 @@ export class UserController {
   @ApiOperation({ summary: 'Get user information' })
   @Post('info-me')
   async getInfoMe(@Res() res, @Req() req) {
-    const tokenAccess = req.cookies.tokenAccess
+    // const tokenAccess = req.cookies.tokenAccess
+    const tokenAccess = req.headers?.authorization || ''
     const data = await this.userService.getInfoMe(tokenAccess)
 
     return formatRes(res, data)
