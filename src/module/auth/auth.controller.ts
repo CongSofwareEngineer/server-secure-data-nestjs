@@ -16,10 +16,10 @@ export class AuthController {
     const tokenRefresh = req.headers?.authorization || ''
 
 
-    const dataVerify = this.authService.verifyAth(tokenRefresh, true)
+    const dataVerify = this.authService.verifyAth(tokenRefresh)
 
     if (dataVerify && typeof dataVerify !== 'boolean') {
-      const tokenAccess = this.authService.generateAuthAccess(dataVerify.id, dataVerify.sdt)
+      const tokenAccess = this.authService.generateAuthAccess(dataVerify.id)
 
       // res.cookie('tokenAccess', tokenAccess, {
       //   httpOnly: true,

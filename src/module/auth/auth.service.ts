@@ -11,35 +11,31 @@ export class AuthService {
     return JWT_AUTH.secret || process.env.SECRET_KEY_JWT
   }
 
-  generateAuth(id: string | Types.ObjectId, sdt: string): { tokenAccess: string; tokenRefresh: string } {
+  generateAuth(id: string | Types.ObjectId): { tokenAccess: string; tokenRefresh: string } {
     return {
-      tokenAccess: this.generateAuthAccess(id.toString(), sdt),
-      tokenRefresh: this.generateAuthRefresh(id.toString(), sdt),
+      tokenAccess: this.generateAuthAccess(id.toString()),
+      tokenRefresh: this.generateAuthRefresh(id.toString()),
     }
   }
 
-  generateAuthAccess(id: string, sdt: string): string {
-    return this.jwtService.sign({ id, sdt }, {
+  generateAuthAccess(id: string): string {
+    return this.jwtService.sign({ id }, {
       secret: this.getSecretKey(),
       expiresIn: JWT_AUTH.expiredAccess
     })
   }
 
-  generateAuthRefresh(id: string, sdt: string): string {
-    return this.jwtService.sign({ id, sdt }, {
+  generateAuthRefresh(id: string): string {
+    return this.jwtService.sign({ id }, {
       secret: this.getSecretKey(),
       expiresIn: JWT_AUTH.expiredRefresh
     })
   }
 
-  verifyAth(
-    token: string,
-    isRefreshToken: boolean = false,
-  ):
+  verifyAth(token: string):
     | false
     | {
       id: string;
-      sdt: string;
       iat: number;
       exp: number;
     } {
@@ -47,7 +43,6 @@ export class AuthService {
       const data = this.jwtService.verify(token.replace('Bearer ', ''), {
         secret: this.getSecretKey(),
         clockTolerance: 10,
-        maxAge: isRefreshToken ? JWT_AUTH.expiredRefresh : JWT_AUTH.expiredAccess,
       })
 
       return data
@@ -61,7 +56,7 @@ export class AuthService {
 
     if (!dataUser) return null
 
-    return this.generateAuthAccess(dataUser.id, dataUser.sdt)
+    return this.generateAuthAccess(dataUser.id)
   }
 
   verifyIdUser(idUser: string, tokenAccess: string): boolean {

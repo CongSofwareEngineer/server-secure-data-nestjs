@@ -50,7 +50,7 @@ export class UserService {
       throw new BadRequestException('Incorrect password')
     }
 
-    const { tokenAccess, tokenRefresh } = this.authService.generateAuth(user._id.toString(), user.phone)
+    const { tokenAccess, tokenRefresh } = this.authService.generateAuth(user._id.toString())
 
     return { user, tokenAccess, tokenRefresh }
   }
