@@ -46,6 +46,8 @@ export class AuthService {
     try {
       const data = this.jwtService.verify(token.replace('Bearer ', ''), {
         secret: this.getSecretKey(),
+        clockTolerance: 10,
+        maxAge: isRefreshToken ? JWT_AUTH.expiredRefresh : JWT_AUTH.expiredAccess,
       })
 
       return data
