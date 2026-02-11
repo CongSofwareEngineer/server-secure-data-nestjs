@@ -1,14 +1,18 @@
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { Finance, FinanceDocument, FinanceStatus } from './schemas/finance.schema'
 import { FunService } from 'src/utils/funcService'
 import { getIdObject } from 'src/utils/function'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
+import { REDIS_KEY } from 'src/common/redis'
+import { Cache } from 'cache-manager'
 
 @Injectable()
 export class FinanceService {
   constructor(
-    @InjectModel(Finance.name) private financeModel: Model<FinanceDocument>
+    @InjectModel(Finance.name) private financeModel: Model<FinanceDocument>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) { }
 
   async getUsdRemaining(): Promise<{ usdRemaining: number; totalDeposit: number; totalWithdraw: number }> {
@@ -50,6 +54,7 @@ export class FinanceService {
       }
     } catch (error) {
       console.error('Error calculating USD remaining:', error)
+
       return { usdRemaining: 0, totalDeposit: 0, totalWithdraw: 0 }
     }
   }
@@ -62,6 +67,15 @@ export class FinanceService {
 
   async findAll(query: any) {
     try {
+      const cacheKey = `${REDIS_KEY.Finance}:${JSON.stringify(query)}`
+
+      // Try to get from cache
+      const cachedData = await this.cacheManager.get<Finance[]>(cacheKey)
+
+      if (cachedData) {
+        return cachedData
+      }
+
       const { data, pagination } = await FunService.getDataByOptionsWithPagination(this.financeModel, query)
 
       return { data, pagination }

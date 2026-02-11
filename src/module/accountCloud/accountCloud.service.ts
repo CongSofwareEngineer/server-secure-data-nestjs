@@ -1,15 +1,19 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { BadRequestException, Inject, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 
 import { FunService } from 'src/utils/funcService'
 import { getIdObject } from 'src/utils/function'
-import { AccountCloud, AccountCloudDocument } from './schemas/accountCloud.schema'
+import { AccountCloud, AccountCloud, AccountCloudDocument } from './schemas/accountCloud.schema'
+import { Cache } from 'cache-manager'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
+import { REDIS_KEY } from 'src/common/redis'
 
 @Injectable()
 export class AccountCloudService {
   constructor(
     @InjectModel(AccountCloud.name) private accountCloudModel: Model<AccountCloudDocument>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) { }
 
   async create(data: Partial<AccountCloud>): Promise<AccountCloud | null> {
@@ -28,6 +32,14 @@ export class AccountCloudService {
 
   async findAll(query: any) {
     try {
+      const cacheKey = `${REDIS_KEY.AccountCloud}:${JSON.stringify(query)}`
+
+      // Try to get from cache
+      const cachedData = await this.cacheManager.get<AccountCloud[]>(cacheKey)
+
+      if (cachedData) {
+        return cachedData
+      }
       const { data, pagination } = await FunService.getDataByOptionsWithPagination(this.accountCloudModel, query)
 
       return { data, pagination }

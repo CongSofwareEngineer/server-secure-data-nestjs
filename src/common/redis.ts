@@ -1,4 +1,6 @@
 export enum REDIS_KEY {
-  Category = 'category',
-  Product = 'product',
+  Finance = 'finance',
+  Account = 'account',
+  User = 'user',
+  AccountCloud = 'accountCloud',
 }
